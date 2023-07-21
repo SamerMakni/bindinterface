@@ -16,17 +16,7 @@ import pubchempy as pcp
 from PIL import Image
 import pickle
 from sklearn.neural_network import MLPClassifier
-
-def predict_with_model(smile, model_path):
-    molecule = Chem.MolFromSmiles(smile)
-    x = np.array(AllChem.RDKFingerprint(molecule, fpSize=2048))
-    # Load the pickled model
-    with open(model_path, 'rb') as f:
-        model = pickle.load(f)
-
-    # Make the prediction using the loaded model
-    y = model.predict([x])
-    return y 
+import pandas as pd
 
 def pubchem_id_to_smiles(pubchem_id):
     try:
@@ -78,83 +68,112 @@ def generate_name(smiles):
     match = compounds[0]
     return match.iupac_name
 
+def distance(smile1, smile2):
+    """
+    Placeholder for the distance function.
+    This function should return a value between 0 and 1.
+    """
+    return np.random.rand()
+
+def highlight_active(s):
+    # Create a blank Series with the same index and columns as the DataFrame
+    attr = pd.Series('', index=s.index, columns=s.columns)
+
+    # Iterate through the DataFrame 'Status' column
+    for i, val in enumerate(s['PUBCHEM_ACTIVITY_OUTCOME']):
+        # Check if the value is 'active'
+        if val == 'active':
+            # Set the background color to light green for the entire row
+            attr.iloc[i] = 'background-color: lightgreen'
+
+    return attr
 
 def search():
 
-    image = Image.open('./Logo_MEEP.png')
-    st.image(image, width=400)
     """
-    ### Molecular Activity Outcome Prediction Against Leishmaniasis
+    ### Search By Smiles
     """
 
+    np_data = np.load("./data/data.npy")
+    df_data = pd.read_csv("./data/data.csv")
 
-    data = np.load("./data.npy")
-
-
-
-    tab1, tab2, tab3= st.tabs(["Molecule SMILE",'PUBCHEM ID' ,'Dataset of SMILES'])
-
-    with tab3:
-        uploaded_file = st.file_uploader("Choose a csv file")
-        if uploaded_file is not None:
-                dataframe = pd.read_csv(uploaded_file, low_memory = False)
-                st.dataframe(dataframe[:100], height = 250)
-
+    tab1, tab2 = st.tabs(["Molecule SMILE", 'PUBCHEM ID'])
     with tab1:
-            smile = st.text_input(label = 'Molecule SMILE', placeholder = 'COC1=C(C=C(C=C1)F)C(=O)C2CCCN(C2)CC3=CC4=C(C=C3)OCCO4')
-            if not smile:
-                pass 
-            else:
-                try:
-                    name = generate_name(smile)
-                    st.caption(name)
-                    render = makeblock(smile)
-                    render_mol(render)
-                    progress_text = "Operation in progress. Please wait."
-                    with st.spinner(progress_text):
-                        mol_weight = cd.MolWt(Chem.MolFromSmiles(smile))
-                        similiarity = calculate_distance(smile, data)
-                    col1, col2, col3 = st.columns(3)
-                    col1.metric("Molecular Weight", round(mol_weight, 2), f"{round((mol_weight - 352),2)}")
-                    col2.metric("Similiraity", f"{round(similiarity,2)}%" , f"{round((similiarity - 0.11),2)}%", delta_color = "inverse")
-                    if passes_lipinski_rule(smile):
-                        col3.metric("Lipinski", "Pass")
-                    elif passes_lipinski_rule(smile) == False:
-                        col3.metric("Lipinski", "Fail")
-                    if predict_with_model(smile, "./model.pkl") == 1:
-                        st.success('Active', icon="✅")
-                    elif predict_with_model(smile, "./model.pkl") == 0:
-                        st.error('Inactive', icon="❌")
-                except Exception as e:
-                    print(e)
-                    st.error('Invalid Smile')
-
-
-
-
-    with tab2:
-        pub = st.text_input(label = 'PUBCHEM ID', placeholder = '161916')
-        if not pub:
-            pass 
+        smile = st.text_input(label='Molecule SMILE', placeholder='COC1=C(C=C(C=C1)F)C(=O)C2CCCN(C2)CC3=CC4=C(C=C3)OCCO4')
+        N = st.slider("Choose the number of closest molecules to display", 1,100,10, key=3)
+        if not smile:
+            pass
         else:
             try:
-                smile = pubchem_id_to_smiles(pub)
-                name = generate_name(smile)
-                st.caption(name)
-                render = makeblock(smile)
-                render_mol(render)
-                progress_text = "Operation in progress. Please wait."
-                with st.spinner(progress_text):
-                    mol_weight = cd.MolWt(Chem.MolFromSmiles(smile))
-                    similiarity = calculate_distance(smile, data)
-                col1, col2, col3 = st.columns(3)
-                col1.metric("Molecular Weight", round(mol_weight, 2), f"{round((mol_weight - 352),2)}")
-                col2.metric("Similiraity", f"{round(similiarity,2)}%" , f"{round((similiarity - 0.11),2)}%", delta_color = "inverse")
-                if passes_lipinski_rule(smile):
-                    col3.metric("Lipinski", "Pass")
-                elif passes_lipinski_rule(smile) == False:
-                    col3.metric("Lipinski", "Fail")
-                st.success('Active', icon="✅")
+                similarities = [distance(smile, df_smile) for df_smile in df_data['SMILES']]
+                df_data['Chemical Distance Similarity'] = similarities
+                df_data.sort_values(by='Chemical Distance Similarity', inplace=True, ascending=False)
+                filtered_df = df_data.head(N)
+                filtered_df.insert(0, 'Chemical Distance', filtered_df['Chemical Distance Similarity'])
+                filtered_df.drop(columns='Chemical Distance Similarity', inplace=True)
+                st.dataframe(filtered_df,
+                column_config={
+                                "Chemical Distance": st.column_config.ProgressColumn(
+                                    "Chemical Distance Similarity",
+                                    help="Chemical Distance Similarity",
+                                    format="%.3f",
+                                    min_value=0,
+                                    max_value=1,
+                                ),
+                            }, hide_index=True)
+                @st.cache_data            
+                def convert_df(df):
+                    # IMPORTANT: Cache the conversion to prevent computation on every rerun
+                    return df.to_csv().encode('utf-8')
+
+                csv = convert_df(filtered_df)
+
+                st.download_button(
+                    label="Download results as CSV",
+                    data=csv,
+                    file_name='results.csv',
+                    mime='text/csv',)
+
+            except Exception as e:
+                print(e)
+                st.error('Invalid Smile')
+
+    with tab2:
+        pubchem_id = st.text_input(label='PUBCHEM ID', placeholder='161916')
+        N = st.slider("Choose the number of closest molecules to display", 1,100,10, key=2)
+        if not pubchem_id:
+            pass
+        else:
+            try:
+                smile = pubchem_id_to_smiles(pubchem_id)
+                similarities = [distance(smile, df_smile) for df_smile in df_data['SMILES']]
+                df_data['Chemical Distance Similarity'] = similarities
+                df_data.sort_values(by='Chemical Distance Similarity', inplace=True, ascending=False)
+                filtered_df = df_data.head(N)
+                filtered_df.insert(0, 'Chemical Distance', filtered_df['Chemical Distance Similarity'])
+                filtered_df.drop(columns='Chemical Distance Similarity', inplace=True)
+                st.dataframe(filtered_df,
+                column_config={
+                                "Chemical Distance": st.column_config.ProgressColumn(
+                                    "Chemical Distance Similarity",
+                                    help="Chemical Distance Similarity",
+                                    format="%.3f",
+                                    min_value=0,
+                                    max_value=1,
+                                ),
+                            }, hide_index=True)
+                @st.cache_data            
+                def convert_df(df):
+                    # IMPORTANT: Cache the conversion to prevent computation on every rerun
+                    return df.to_csv().encode('utf-8')
+
+                csv = convert_df(filtered_df)
+
+                st.download_button(
+                    label="Download results as CSV",
+                    data=csv,
+                    file_name='results.csv',
+                    mime='text/csv',)
 
             except Exception as e:
                 print(e)
