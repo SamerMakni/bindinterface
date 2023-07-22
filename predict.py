@@ -16,7 +16,23 @@ import pubchempy as pcp
 from PIL import Image
 import pickle
 from sklearn.neural_network import MLPClassifier
+import os
+import pickle
 
+
+def load_pickle_files_from_folder(folder_path, name_condition=None):
+    file_names = []
+    
+    for filename in os.listdir(folder_path):
+        if name_condition is None or name_condition(filename):
+            file_name_without_extension = os.path.splitext(filename)[0]
+            file_names.append(file_name_without_extension)
+    
+    return file_names
+
+folder_path = "./model"
+
+loaded_models_filenames = load_pickle_files_from_folder(folder_path, name_condition=lambda x: x.endswith('.pkl'))
 
 def predict_with_model(smile, model_path):
     molecule = Chem.MolFromSmiles(smile)
@@ -92,9 +108,12 @@ def predict():
 
 
 
-    tab1, tab2= st.tabs(["Molecule SMILE",'PUBCHEM ID'])
+    tab1, tab2, tab3= st.tabs(["Molecule SMILE",'PUBCHEM ID', "Multiple SMILES"])
     with tab1:
             smile = st.text_input(label = 'Molecule SMILE', placeholder = 'COC1=C(C=C(C=C1)F)C(=O)C2CCCN(C2)CC3=CC4=C(C=C3)OCCO4')
+            option = st.selectbox(
+                'Select Model',
+                loaded_models_filenames, key = 42)
             if not smile:
                 pass 
             else:
@@ -114,9 +133,9 @@ def predict():
                         col3.metric("Lipinski", "Pass")
                     elif passes_lipinski_rule(smile) == False:
                         col3.metric("Lipinski", "Fail")
-                    if predict_with_model(smile, "./model.pkl") == 1:
+                    if predict_with_model(smile, f".//model/{option}.pkl") == 1:
                         st.success('Active', icon="✅")
-                    elif predict_with_model(smile, "./model.pkl") == 0:
+                    elif predict_with_model(smile, f"./model/{option}.pkl") == 0:
                         st.error('Inactive', icon="❌")
                 except Exception as e:
                     print(e)
@@ -127,6 +146,7 @@ def predict():
 
     with tab2:
         pub = st.text_input(label = 'PUBCHEM ID', placeholder = '161916')
+        option = st.selectbox('Select Model',loaded_models_filenames, key = 43)
         if not pub:
             pass 
         else:
@@ -147,8 +167,13 @@ def predict():
                     col3.metric("Lipinski", "Pass")
                 elif passes_lipinski_rule(smile) == False:
                     col3.metric("Lipinski", "Fail")
-                st.success('Active', icon="✅")
-
+                if predict_with_model(smile, f".//model/{option}.pkl") == 1:
+                    st.success('Active', icon="✅")
+                elif predict_with_model(smile, f"./model/{option}.pkl") == 0:
+                    st.error('Inactive', icon="❌")
             except Exception as e:
                 print(e)
                 st.error('Invalid PubchemID')
+
+    with tab3:
+        pass
