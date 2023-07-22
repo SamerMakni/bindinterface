@@ -8,15 +8,22 @@ from about import about
 import time
 from streamlit_extras.app_logo import add_logo
 
-
-st.set_page_config(layout="wide")
-add_logo("http://placekitten.com/120/120")
+st.set_page_config(
+    page_title="Ex-stream-ly Cool App",
+    page_icon="./images/chemistry.png",
+    layout="wide",
+    menu_items={
+        'Get Help': 'https://www.extremelycoolapp.com/help',
+        'Report a bug': "https://www.extremelycoolapp.com/bug",
+        'About': "# This is a header. This is an *extremely* cool app!"
+    }
+)
 
 
 st.markdown('<style>' + open('./style.css').read() + '</style>', unsafe_allow_html=True)
 hide_streamlit_style = """
             <style>
-            MainMenu {visibility: hidden;}
+            <!-- MainMenu {visibility: hidden;} -->
             footer {visibility: hidden;}
             div.appview-container>section {top: 0px}
             </style>
@@ -36,7 +43,7 @@ with st.sidebar:
 
 if tabs == 'Home':
     home()
-    
+
 elif tabs == 'About':
     about()
 
