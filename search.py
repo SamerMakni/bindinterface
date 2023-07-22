@@ -15,8 +15,9 @@ from scipy.spatial import distance
 import pubchempy as pcp
 from PIL import Image
 import pickle
-from sklearn.neural_network import MLPClassifier
 import pandas as pd
+from streamlit_extras.add_vertical_space import add_vertical_space
+
 
 def pubchem_id_to_smiles(pubchem_id):
     try:
@@ -75,18 +76,12 @@ def distance(smile1, smile2):
     """
     return np.random.rand()
 
-def highlight_active(s):
-    # Create a blank Series with the same index and columns as the DataFrame
-    attr = pd.Series('', index=s.index, columns=s.columns)
+def highlight_active(val):
+    if val == 'Active':
+        return 'color: green; font-weight: 800'
+    else:
+        return ''
 
-    # Iterate through the DataFrame 'Status' column
-    for i, val in enumerate(s['PUBCHEM_ACTIVITY_OUTCOME']):
-        # Check if the value is 'active'
-        if val == 'active':
-            # Set the background color to light green for the entire row
-            attr.iloc[i] = 'background-color: lightgreen'
-
-    return attr
 
 def search():
 
@@ -100,39 +95,53 @@ def search():
     tab1, tab2 = st.tabs(["Molecule SMILE", 'PUBCHEM ID'])
     with tab1:
         smile = st.text_input(label='Molecule SMILE', placeholder='COC1=C(C=C(C=C1)F)C(=O)C2CCCN(C2)CC3=CC4=C(C=C3)OCCO4')
-        N = st.slider("Choose the number of closest molecules to display", 1,100,10, key=3)
+        col1, col2 = st.columns([0.6, 0.4])
+        with col1:
+            N = st.slider("Choose the number of closest molecules to display", 1,100,10, key=3)
+        with col2:
+            add_vertical_space(2)
+            show_active_only = st.checkbox("Show only Active molecules", key = 10)
         if not smile:
             pass
         else:
             try:
+                with st.spinner("Please wait"):
+                    name = generate_name(smile)
+                    st.caption(name)
                 similarities = [distance(smile, df_smile) for df_smile in df_data['SMILES']]
                 df_data['Chemical Distance Similarity'] = similarities
                 df_data.sort_values(by='Chemical Distance Similarity', inplace=True, ascending=False)
                 filtered_df = df_data.head(N)
                 filtered_df.insert(0, 'Chemical Distance', filtered_df['Chemical Distance Similarity'])
+                if show_active_only:
+                    filtered_df = filtered_df[filtered_df['PUBCHEM_ACTIVITY_OUTCOME'] == 'Active']
                 filtered_df.drop(columns='Chemical Distance Similarity', inplace=True)
-                st.dataframe(filtered_df,
-                column_config={
-                                "Chemical Distance": st.column_config.ProgressColumn(
-                                    "Chemical Distance Similarity",
-                                    help="Chemical Distance Similarity",
-                                    format="%.3f",
-                                    min_value=0,
-                                    max_value=1,
-                                ),
-                            }, hide_index=True)
-                @st.cache_data            
-                def convert_df(df):
-                    # IMPORTANT: Cache the conversion to prevent computation on every rerun
-                    return df.to_csv().encode('utf-8')
+                styled_filtered_df = filtered_df.style.applymap(highlight_active, subset=['PUBCHEM_ACTIVITY_OUTCOME'])
+                if filtered_df.empty:
+                    st.warning("No results found for the given SMILES.")
+                else:
+                    st.dataframe(styled_filtered_df ,
+                                        column_config={
+                                            "Chemical Distance": st.column_config.ProgressColumn(
+                                                "Chemical Distance Similarity",
+                                                help="Chemical Distance Similarity",
+                                                format="%.3f",
+                                                min_value=0,
+                                                max_value=1,
+                                            ),
+                                        }, hide_index=True)
+                    @st.cache_data            
+                    def convert_df(df):
+                        # IMPORTANT: Cache the conversion to prevent computation on every rerun
+                        return df.to_csv().encode('utf-8')
 
-                csv = convert_df(filtered_df)
+                    csv = convert_df(filtered_df)
 
-                st.download_button(
-                    label="Download results as CSV",
-                    data=csv,
-                    file_name='results.csv',
-                    mime='text/csv',)
+                    st.download_button(
+                        label="Download results as CSV",
+                        data=csv,
+                        file_name='results.csv',
+                        mime='text/csv',)
 
             except Exception as e:
                 print(e)
@@ -140,41 +149,55 @@ def search():
 
     with tab2:
         pubchem_id = st.text_input(label='PUBCHEM ID', placeholder='161916')
-        N = st.slider("Choose the number of closest molecules to display", 1,100,10, key=2)
+        col1, col2 = st.columns([0.6, 0.4])
+        with col1:
+            N = st.slider("Choose the number of closest molecules to display", 1,100,10, key=2)
+        with col2:
+            add_vertical_space(2)
+            show_active_only = st.checkbox("Show only Active molecules", key = 9)
         if not pubchem_id:
             pass
         else:
             try:
-                smile = pubchem_id_to_smiles(pubchem_id)
-                similarities = [distance(smile, df_smile) for df_smile in df_data['SMILES']]
+                smile_pub = pubchem_id_to_smiles(pubchem_id)
+                with st.spinner("Please wait"):
+                    name = generate_name(smile_pub)
+                    st.caption(name)
+                similarities = [distance(smile_pub, df_smile) for df_smile in df_data['SMILES']]
                 df_data['Chemical Distance Similarity'] = similarities
                 df_data.sort_values(by='Chemical Distance Similarity', inplace=True, ascending=False)
                 filtered_df = df_data.head(N)
                 filtered_df.insert(0, 'Chemical Distance', filtered_df['Chemical Distance Similarity'])
+                if show_active_only:
+                    filtered_df = filtered_df[filtered_df['PUBCHEM_ACTIVITY_OUTCOME'] == 'Active']
                 filtered_df.drop(columns='Chemical Distance Similarity', inplace=True)
-                st.dataframe(filtered_df,
-                column_config={
-                                "Chemical Distance": st.column_config.ProgressColumn(
-                                    "Chemical Distance Similarity",
-                                    help="Chemical Distance Similarity",
-                                    format="%.3f",
-                                    min_value=0,
-                                    max_value=1,
-                                ),
-                            }, hide_index=True)
-                @st.cache_data            
-                def convert_df(df):
-                    # IMPORTANT: Cache the conversion to prevent computation on every rerun
-                    return df.to_csv().encode('utf-8')
+                styled_filtered_df = filtered_df.style.applymap(highlight_active, subset=['PUBCHEM_ACTIVITY_OUTCOME'])
+                if filtered_df.empty:
+                    st.warning("No results found for the given SMILES.")
+                else:
+                    st.dataframe(styled_filtered_df ,
+                                        column_config={
+                                            "Chemical Distance": st.column_config.ProgressColumn(
+                                                "Chemical Distance Similarity",
+                                                help="Chemical Distance Similarity",
+                                                format="%.3f",
+                                                min_value=0,
+                                                max_value=1,
+                                            ),
+                                        }, hide_index=True)
+                    @st.cache_data            
+                    def convert_df(df):
+                        # IMPORTANT: Cache the conversion to prevent computation on every rerun
+                        return df.to_csv().encode('utf-8')
 
-                csv = convert_df(filtered_df)
+                    csv = convert_df(filtered_df)
 
-                st.download_button(
-                    label="Download results as CSV",
-                    data=csv,
-                    file_name='results.csv',
-                    mime='text/csv',)
+                    st.download_button(
+                        label="Download results as CSV",
+                        data=csv,
+                        file_name='results.csv',
+                        mime='text/csv',)
 
             except Exception as e:
                 print(e)
-                st.error('Invalid Smile')
+                st.error(e)

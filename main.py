@@ -3,6 +3,9 @@ import streamlit as st
 from search import search
 from predict import predict
 import time
+from streamlit_extras.app_logo import add_logo
+
+st.set_page_config(layout="wide")
 
 
 
