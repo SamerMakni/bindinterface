@@ -9,32 +9,25 @@ import time
 from streamlit_extras.app_logo import add_logo
 
 st.set_page_config(
-    page_title="Ex-stream-ly Cool App",
+    page_title="MoleculaBIND",
     page_icon="./images/chemistry.png",
     layout="wide",
-    menu_items={
-        'Get Help': 'https://www.extremelycoolapp.com/help',
-        'Report a bug': "https://www.extremelycoolapp.com/bug",
-        'About': "# This is a header. This is an *extremely* cool app!"
-    }
 )
 
 
 st.markdown('<style>' + open('./style.css').read() + '</style>', unsafe_allow_html=True)
 hide_streamlit_style = """
             <style>
-            <!-- MainMenu {visibility: hidden;} -->
+            MainMenu {visibility: hidden;}
             footer {visibility: hidden;}
             div.appview-container>section {top: 0px}
             </style>
             """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
 
-# Set 'Home' as the default tab
-
 
 with st.sidebar:
-    tabs = on_hover_tabs(tabName=['Home', 'About','Search', 'Predict', 'Contact Us'], 
+    tabs = on_hover_tabs(tabName=['Home', 'Information','Search', 'Predict', 'Contact Us'], 
                          iconName=['home', 'info','search', 'functions', 'alternate_email'],
                          key="1",
                          default_choice=0)
@@ -44,7 +37,7 @@ with st.sidebar:
 if tabs == 'Home':
     home()
 
-elif tabs == 'About':
+elif tabs == 'Information':
     about()
 
 elif tabs == 'Search':
