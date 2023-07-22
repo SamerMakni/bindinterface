@@ -17,6 +17,7 @@ from PIL import Image
 import pickle
 from sklearn.neural_network import MLPClassifier
 
+
 def predict_with_model(smile, model_path):
     molecule = Chem.MolFromSmiles(smile)
     x = np.array(AllChem.RDKFingerprint(molecule, fpSize=2048))
@@ -85,6 +86,7 @@ def predict():
     ### Search By Smiles
     """
 
+    st.title("Predict")
 
     data = np.load("./data/data.npy")
 

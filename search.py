@@ -84,6 +84,7 @@ def highlight_active(val):
 
 
 def search():
+    st.title("Search")
 
     """
     ### Search By Smiles
@@ -200,4 +201,4 @@ def search():
 
             except Exception as e:
                 print(e)
-                st.error(e)
+                st.error("Invalid PUBCHEM ID")
