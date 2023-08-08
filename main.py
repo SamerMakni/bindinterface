@@ -15,7 +15,7 @@ st.set_page_config(
 )
 
 
-st.markdown('<style>' + open('./style.css').read() + '</style>', unsafe_allow_html=True)
+st.markdown('<style>' + open('./src/style.css').read() + '</style>', unsafe_allow_html=True)
 hide_streamlit_style = """
             <style>
             MainMenu {visibility: hidden;}
@@ -31,8 +31,6 @@ with st.sidebar:
                          iconName=['home', 'info','search', 'functions', 'alternate_email'],
                          key="1",
                          default_choice=0)
-
-
 
 if tabs == 'Home':
     home()

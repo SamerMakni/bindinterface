@@ -30,7 +30,7 @@ def load_pickle_files_from_folder(folder_path, name_condition=None):
     
     return file_names
 
-folder_path = "./model"
+folder_path = "./models"
 
 loaded_models_filenames = load_pickle_files_from_folder(folder_path, name_condition=lambda x: x.endswith('.pkl'))
 
@@ -133,9 +133,9 @@ def predict():
                         col3.metric("Lipinski", "Pass")
                     elif passes_lipinski_rule(smile) == False:
                         col3.metric("Lipinski", "Fail")
-                    if predict_with_model(smile, f".//model/{option}.pkl") == 1:
+                    if predict_with_model(smile, f"./models/{option}.pkl") == 1:
                         st.success('Active', icon="✅")
-                    elif predict_with_model(smile, f"./model/{option}.pkl") == 0:
+                    elif predict_with_model(smile, f"./models/{option}.pkl") == 0:
                         st.error('Inactive', icon="❌")
                 except Exception as e:
                     print(e)
@@ -167,9 +167,9 @@ def predict():
                     col3.metric("Lipinski", "Pass")
                 elif passes_lipinski_rule(smile) == False:
                     col3.metric("Lipinski", "Fail")
-                if predict_with_model(smile, f".//model/{option}.pkl") == 1:
+                if predict_with_model(smile, f".//models/{option}.pkl") == 1:
                     st.success('Active', icon="✅")
-                elif predict_with_model(smile, f"./model/{option}.pkl") == 0:
+                elif predict_with_model(smile, f"./models/{option}.pkl") == 0:
                     st.error('Inactive', icon="❌")
             except Exception as e:
                 print(e)
