@@ -103,12 +103,14 @@ def predict():
     """
 
     st.title("Predict")
+    st.write("For more information about the models used for prediction, visit the **Information** section.")
+
 
     data = np.load("./data/data.npy")
 
 
 
-    tab1, tab2, tab3= st.tabs(["Molecule SMILE",'PUBCHEM ID', "Multiple SMILES"])
+    tab1, tab2 = st.tabs(["Molecule SMILE",'PUBCHEM ID'])
     with tab1:
             smile = st.text_input(label = 'Molecule SMILE', placeholder = 'COC1=C(C=C(C=C1)F)C(=O)C2CCCN(C2)CC3=CC4=C(C=C3)OCCO4')
             option = st.selectbox(
@@ -124,19 +126,10 @@ def predict():
                     render_mol(render)
                     progress_text = "Operation in progress. Please wait."
                     with st.spinner(progress_text):
-                        mol_weight = cd.MolWt(Chem.MolFromSmiles(smile))
-                        similiarity = calculate_distance(smile, data)
-                    col1, col2, col3 = st.columns(3)
-                    col1.metric("Molecular Weight", round(mol_weight, 2), f"{round((mol_weight - 352),2)}")
-                    col2.metric("Similiraity", f"{round(similiarity,2)}%" , f"{round((similiarity - 0.11),2)}%", delta_color = "inverse")
-                    if passes_lipinski_rule(smile):
-                        col3.metric("Lipinski", "Pass")
-                    elif passes_lipinski_rule(smile) == False:
-                        col3.metric("Lipinski", "Fail")
-                    if predict_with_model(smile, f"./models/{option}.pkl") == 1:
-                        st.success('Active', icon="✅")
-                    elif predict_with_model(smile, f"./models/{option}.pkl") == 0:
-                        st.error('Inactive', icon="❌")
+                        if predict_with_model(smile, f"./models/{option}.pkl") == 1:
+                            st.success('Active', icon="✅")
+                        elif predict_with_model(smile, f"./models/{option}.pkl") == 0:
+                            st.error('Inactive', icon="❌")
                 except Exception as e:
                     print(e)
                     st.error('Invalid Smile')
@@ -158,22 +151,10 @@ def predict():
                 render_mol(render)
                 progress_text = "Operation in progress. Please wait."
                 with st.spinner(progress_text):
-                    mol_weight = cd.MolWt(Chem.MolFromSmiles(smile))
-                    similiarity = calculate_distance(smile, data)
-                col1, col2, col3 = st.columns(3)
-                col1.metric("Molecular Weight", round(mol_weight, 2), f"{round((mol_weight - 352),2)}")
-                col2.metric("Similiraity", f"{round(similiarity,2)}%" , f"{round((similiarity - 0.11),2)}%", delta_color = "inverse")
-                if passes_lipinski_rule(smile):
-                    col3.metric("Lipinski", "Pass")
-                elif passes_lipinski_rule(smile) == False:
-                    col3.metric("Lipinski", "Fail")
-                if predict_with_model(smile, f".//models/{option}.pkl") == 1:
-                    st.success('Active', icon="✅")
-                elif predict_with_model(smile, f"./models/{option}.pkl") == 0:
-                    st.error('Inactive', icon="❌")
+                    if predict_with_model(smile, f".//models/{option}.pkl") == 1:
+                        st.success('Active', icon="✅")
+                    elif predict_with_model(smile, f"./models/{option}.pkl") == 0:
+                        st.error('Inactive', icon="❌")
             except Exception as e:
                 print(e)
                 st.error('Invalid PubchemID')
-
-    with tab3:
-        pass

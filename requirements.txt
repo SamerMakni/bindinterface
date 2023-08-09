@@ -10,3 +10,5 @@ stmol==0.0.7
 streamlit==1.25.0
 streamlit_extras==0.2.7
 streamlit_on_Hover_tabs==1.0.1
+streamlit-modal==0.1.0
+lorem-text==2.1

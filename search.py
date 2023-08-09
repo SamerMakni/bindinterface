@@ -17,6 +17,11 @@ from PIL import Image
 import pickle
 import pandas as pd
 from streamlit_extras.add_vertical_space import add_vertical_space
+import config
+from scipy.spatial.distance import dice, cosine, hamming
+from streamlit_modal import Modal
+import streamlit.components.v1 as components
+import re
 
 
 def pubchem_id_to_smiles(pubchem_id):
@@ -69,55 +74,105 @@ def generate_name(smiles):
     match = compounds[0]
     return match.iupac_name
 
-def distance(smile1, smile2):
-    """
-    Placeholder for the distance function.
-    This function should return a value between 0 and 1.
-    """
-    return np.random.rand()
 
 def highlight_active(val):
-    if val == 'Active':
+    if val == 'active':
         return 'color: green; font-weight: 800'
     else:
         return ''
 
+def calculate_similarity(query_smiles, df_smiles, fingerprint_array, distance_metric='tanimoto'):
+    query_molecule = Chem.MolFromSmiles(query_smiles)
+    query_fingerprint = AllChem.GetMorganFingerprintAsBitVect(query_molecule, 2)
+    query_array = np.array(query_fingerprint, dtype=bool)
+    
+    similarities = []
+    
+    for i, df_smile in enumerate(df_smiles):
+        df_molecule = Chem.MolFromSmiles(df_smile)
+        df_fingerprint = fingerprint_array[i]
+        
+        if distance_metric == 'Tanimoto':
+            similarity = np.sum(query_array & df_fingerprint) / np.sum(query_array | df_fingerprint)
+        elif distance_metric == 'Sørensen–Dice':
+            similarity = 1 - dice(query_array, df_fingerprint)
+        elif distance_metric == 'Cosine':
+            similarity = 1 - cosine(query_array, df_fingerprint)
+        elif distance_metric == 'Tversky':
+            alpha = 0.3 
+            tversky_similarity = np.sum(query_array & df_fingerprint) / (
+                np.sum(query_array & df_fingerprint) + alpha * np.sum(query_array & ~df_fingerprint) +
+                (1 - alpha) * np.sum(~query_array & df_fingerprint)
+            )
+            similarity = tversky_similarity
+        elif distance_metric == 'Average':
+            alpha = 0.3 
+            tanimoto_similarity = np.sum(query_array & df_fingerprint) / np.sum(query_array | df_fingerprint)
+            dice_similarity = 1 - dice(query_array, df_fingerprint)
+            cosine_similarity = 1 - cosine(query_array, df_fingerprint)
+            tversky_similarity = np.sum(query_array & df_fingerprint) / (
+                np.sum(query_array & df_fingerprint) + alpha * np.sum(query_array & ~df_fingerprint) +
+                (1 - alpha) * np.sum(~query_array & df_fingerprint)
+            )
+            similarity = np.mean([tanimoto_similarity, dice_similarity, cosine_similarity, tversky_similarity])
+        else:
+            raise ValueError("Invalid distance_metric specified")
+        
+        similarities.append(similarity)
+    
+    return similarities
+
+
+def is_valid_email(email):
+    # Simple email format validation using regex
+    pattern = r"^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$"
+    return re.match(pattern, email)
 
 def search():
     st.title("Search")
+    st.write("For more information about the models used for prediction, visit the **Information** section.")
 
     """
     ### Search By Smiles
     """
 
     np_data = np.load("./data/data.npy")
-    df_data = pd.read_csv("./data/data.csv")
+    df_data = pd.read_csv(config.data_point)
 
     tab1, tab2 = st.tabs(["Molecule SMILE", 'PUBCHEM ID'])
     with tab1:
         smile = st.text_input(label='Molecule SMILE', placeholder='COC1=C(C=C(C=C1)F)C(=O)C2CCCN(C2)CC3=CC4=C(C=C3)OCCO4')
-        col1, col2 = st.columns([0.6, 0.4])
+        col1, col2, col3 = st.columns([0.6, 0.2, 0.2])
         with col1:
             N = st.slider("Choose the number of closest molecules to display", 1,100,10, key=3)
         with col2:
             add_vertical_space(2)
             show_active_only = st.checkbox("Show only Active molecules", key = 10)
+        with col3:
+            distance = 'Sørensen–Dice'
+            distance = st.selectbox('Distance Measure',('Sørensen–Dice', 'Tanimoto', 'Cosine', 'Tversky', 'Average'), key = 44)
+
         if not smile:
             pass
         else:
             try:
                 with st.spinner("Please wait"):
-                    name = generate_name(smile)
-                    st.caption(name)
-                similarities = [distance(smile, df_smile) for df_smile in df_data['SMILES']]
+                    try:
+                        name = generate_name(smile)
+                        st.caption(name)
+                    except:
+                        print("cant generate name")
+                df_smiles = df_data['smiles'].tolist()
+                similarities = calculate_similarity(smile, df_smiles, np_data, distance_metric = distance)
                 df_data['Chemical Distance Similarity'] = similarities
                 df_data.sort_values(by='Chemical Distance Similarity', inplace=True, ascending=False)
                 filtered_df = df_data.head(N)
                 filtered_df.insert(0, 'Chemical Distance', filtered_df['Chemical Distance Similarity'])
                 if show_active_only:
-                    filtered_df = filtered_df[filtered_df['PUBCHEM_ACTIVITY_OUTCOME'] == 'Active']
+                    filtered_df = filtered_df[filtered_df['active_or_inactive'] == 'active']
                 filtered_df.drop(columns='Chemical Distance Similarity', inplace=True)
-                styled_filtered_df = filtered_df.style.applymap(highlight_active, subset=['PUBCHEM_ACTIVITY_OUTCOME'])
+                filtered_df = filtered_df.loc[:, ~filtered_df.columns.str.contains('^Unnamed')]
+                styled_filtered_df = filtered_df.style.applymap(highlight_active, subset=['active_or_inactive'])
                 if filtered_df.empty:
                     st.warning("No results found for the given SMILES.")
                 else:
@@ -143,6 +198,32 @@ def search():
                         data=csv,
                         file_name='results.csv',
                         mime='text/csv',)
+                    modal = Modal("Request access to all data", key = 98)
+
+                    if modal.is_open():
+                        with modal.container():
+                            with st.form("data_access_form"):
+                                # Personal Information
+                                name = st.text_input("Name", "")
+                                email = st.text_input("Email", "")
+
+                                # Reason for Data Access
+                                reason = st.text_area("Reason for Data Access", "")
+
+                                # Submit Button
+                                submitted = st.form_submit_button("Submit Request")
+                                if submitted:
+                                    if name and email and reason:
+                                        if is_valid_email(email):
+                                            st.success("Thank you! Your data access request has been submitted.")
+                                        else:
+                                            st.warning("Please enter a valid email address.")
+                                else:
+                                    st.warning("Please fill out all the fields.")
+                    open_modal = st.button("Request access to all data", key = 145)
+                    if open_modal:
+                        modal.open()
+                    
 
             except Exception as e:
                 print(e)
@@ -150,29 +231,37 @@ def search():
 
     with tab2:
         pubchem_id = st.text_input(label='PUBCHEM ID', placeholder='161916')
-        col1, col2 = st.columns([0.6, 0.4])
+        col1, col2, col3 = st.columns([0.6, 0.2, 0.2])
         with col1:
             N = st.slider("Choose the number of closest molecules to display", 1,100,10, key=2)
         with col2:
             add_vertical_space(2)
             show_active_only = st.checkbox("Show only Active molecules", key = 9)
+        with col3:
+            distance = 'Sørensen–Dice'
+            distance = st.selectbox('Distance Measure',('Sørensen–Dice', 'Tanimoto', 'Cosine', 'Tversky', 'Average'), key = 45)
         if not pubchem_id:
             pass
         else:
             try:
                 smile_pub = pubchem_id_to_smiles(pubchem_id)
                 with st.spinner("Please wait"):
-                    name = generate_name(smile_pub)
-                    st.caption(name)
-                similarities = [distance(smile_pub, df_smile) for df_smile in df_data['SMILES']]
+                    try:
+                        name = generate_name(smile_pub)
+                        st.caption(name)
+                    except:
+                        print("cant generate name")
+                df_smiles = df_data['smiles'].tolist()
+                similarities = calculate_similarity(smile_pub , df_smiles, np_data, distance_metric = distance)
                 df_data['Chemical Distance Similarity'] = similarities
                 df_data.sort_values(by='Chemical Distance Similarity', inplace=True, ascending=False)
                 filtered_df = df_data.head(N)
                 filtered_df.insert(0, 'Chemical Distance', filtered_df['Chemical Distance Similarity'])
                 if show_active_only:
-                    filtered_df = filtered_df[filtered_df['PUBCHEM_ACTIVITY_OUTCOME'] == 'Active']
+                    filtered_df = filtered_df[filtered_df['active_or_inactive'] == 'active']
                 filtered_df.drop(columns='Chemical Distance Similarity', inplace=True)
-                styled_filtered_df = filtered_df.style.applymap(highlight_active, subset=['PUBCHEM_ACTIVITY_OUTCOME'])
+                filtered_df = filtered_df.loc[:, ~filtered_df.columns.str.contains('^Unnamed')]
+                styled_filtered_df = filtered_df.style.applymap(highlight_active, subset=['active_or_inactive'])
                 if filtered_df.empty:
                     st.warning("No results found for the given SMILES.")
                 else:
@@ -198,6 +287,32 @@ def search():
                         data=csv,
                         file_name='results.csv',
                         mime='text/csv',)
+                    modal = Modal("Request access to all data", key = 99)
+
+                    if modal.is_open():
+                        with modal.container():
+                            with st.form("data_access_form"):
+                                # Personal Information
+                                name = st.text_input("Name", "")
+                                email = st.text_input("Email", "")
+
+                                # Reason for Data Access
+                                reason = st.text_area("Reason for Data Access", "")
+
+                                # Submit Button
+                                submitted = st.form_submit_button("Submit Request")
+                                if submitted:
+                                    if name and email and reason:
+                                        if is_valid_email(email):
+                                            st.success("Thank you! Your data access request has been submitted.")
+                                        else:
+                                            st.warning("Please enter a valid email address.")
+                                else:
+                                    st.warning("Please fill out all the fields.")
+                    open_modal = st.button("Request access to all data", key = 259)
+                    if open_modal:
+                        modal.open()
+                    
 
             except Exception as e:
                 print(e)
