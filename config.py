@@ -1,1 +1,1 @@
-data_point = "./data/cidals_edited.csv"
+data_point = "./data/cidals_user_view.csv"
