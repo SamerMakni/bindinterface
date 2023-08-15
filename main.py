@@ -9,7 +9,7 @@ import time
 from streamlit_extras.app_logo import add_logo
 
 st.set_page_config(
-    page_title="MoleculaBIND",
+    page_title="CidalsDB",
     page_icon="./images/chemistry.png",
     layout="wide",
 )
