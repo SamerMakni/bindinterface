@@ -1,13 +1,32 @@
 import streamlit as st
 from lorem_text import lorem
+import plotly.express as px
+import pandas as pd
+
+df = pd.read_csv("./data/cidals_user_view.csv")
+
+value_counts = df["active_or_inactive"].value_counts()
+
+value_counts = df["active_or_inactive"].value_counts()
+
+colors = ["#5454b3", "#8CC589"]
+fig = px.pie(
+    data_frame=df,
+    values=value_counts,
+    names=value_counts.index,
+    title="Active vs. Inactive Distribution",
+    color=value_counts.index,
+    color_discrete_map={"active": colors[0], "inactive": colors[1]}
+)
 
 text = lorem.paragraph()
 def about():
-    st.title("About")
-    st.header("Data")
+    st.title("About CidalsDB")
+    st.header("Datasets")
     st.write("""
     For now, we have datasets for two infectious diseases of interest within the **CidalsDB** database, that are accessible for the scientific community, namely *Leishmaniases* and *Coronaviruses*. For each disease, we performed an extensive search of the literature and retrieved data on molecules with validated anti-pathogen effects. We defined a data dictionary of published information related to the biological activity of the chemical compounds and used it to build the database. Then, we enriched the literature data with confirmatory screening datasets from PubChem. This led to consolidated sets of active and inactive molecules against Leishmania parasites and Coronaviruses. Additional infectious diseases will be considered to expand the database content.
     """)
+    st.plotly_chart(fig)
 
     
     st.header("Search")
