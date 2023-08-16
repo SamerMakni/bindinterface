@@ -4,6 +4,7 @@ import plotly.express as px
 import pandas as pd
 
 df = pd.read_csv("./data/cidals_user_view.csv")
+df_full = pd.read_csv("./data/cidals_full_view.csv")
 
 value_counts = df["active_or_inactive"].value_counts()
 
@@ -19,6 +20,11 @@ fig = px.pie(
     color_discrete_map={"active": colors[0], "inactive": colors[1]}
 )
 
+fig_2 = px.bar(df_full, x='ID_test_type', title='Distribution of Enzymo Target', color_discrete_sequence =['green']*len(df), opacity=1)
+fig_2.update_layout(plot_bgcolor='white', paper_bgcolor='white')
+fig_2.update_xaxes(title = "")
+fig_2.update_yaxes(showgrid=True, gridcolor='lightgray')
+
 text = lorem.paragraph()
 def about():
     st.title("About CidalsDB")
@@ -26,7 +32,14 @@ def about():
     st.write("""
     For now, we have datasets for two infectious diseases of interest within the **CidalsDB** database, that are accessible for the scientific community, namely *Leishmaniases* and *Coronaviruses*. For each disease, we performed an extensive search of the literature and retrieved data on molecules with validated anti-pathogen effects. We defined a data dictionary of published information related to the biological activity of the chemical compounds and used it to build the database. Then, we enriched the literature data with confirmatory screening datasets from PubChem. This led to consolidated sets of active and inactive molecules against Leishmania parasites and Coronaviruses. Additional infectious diseases will be considered to expand the database content.
     """)
-    st.plotly_chart(fig)
+    col1, col2 = st.columns(2)
+    with col1:
+        st.plotly_chart(fig)
+
+
+    with col2:
+        st.plotly_chart(fig_2)
+
 
     
     st.header("Search")
