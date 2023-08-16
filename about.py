@@ -4,10 +4,13 @@ from lorem_text import lorem
 text = lorem.paragraph()
 def about():
     st.title("About")
-    st.header("1. Data")
-    st.write(text)
+    st.header("Data")
+    st.write("""
+    For now, we have datasets for two infectious diseases of interest within the **CidalsDB** database, that are accessible for the scientific community, namely *Leishmaniases* and *Coronaviruses*. For each disease, we performed an extensive search of the literature and retrieved data on molecules with validated anti-pathogen effects. We defined a data dictionary of published information related to the biological activity of the chemical compounds and used it to build the database. Then, we enriched the literature data with confirmatory screening datasets from PubChem. This led to consolidated sets of active and inactive molecules against Leishmania parasites and Coronaviruses. Additional infectious diseases will be considered to expand the database content.
+    """)
+
     
-    st.header("2. Search")
+    st.header("Search")
     st.subheader("a. Sørensen-Dice Coefficient")
     st.write("The Sørensen-Dice coefficient is a measure of the similarity between two sets...")
     st.latex(r"S(Dice) = \frac{2 \cdot |A \cap B|}{|A| + |B|}")

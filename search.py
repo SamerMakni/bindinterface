@@ -185,6 +185,8 @@ def search():
                                                 min_value=0,
                                                 max_value=1,
                                             ),
+                                             "refs": st.column_config.LinkColumn()
+
                                         }, hide_index=True)
                     @st.cache_data            
                     def convert_df(df):
@@ -274,6 +276,8 @@ def search():
                                                 min_value=0,
                                                 max_value=1,
                                             ),
+                                             "refs": st.column_config.LinkColumn()
+
                                         }, hide_index=True)
                     @st.cache_data            
                     def convert_df(df):
