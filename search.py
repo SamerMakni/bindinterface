@@ -124,7 +124,6 @@ def calculate_similarity(query_smiles, df_smiles, fingerprint_array, distance_me
 
 
 def is_valid_email(email):
-    # Simple email format validation using regex
     pattern = r"^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$"
     return re.match(pattern, email)
 
@@ -190,7 +189,6 @@ def search():
                                         }, hide_index=True)
                     @st.cache_data            
                     def convert_df(df):
-                        # IMPORTANT: Cache the conversion to prevent computation on every rerun
                         return df.to_csv().encode('utf-8')
 
                     csv = convert_df(filtered_df)
@@ -205,14 +203,9 @@ def search():
                     if modal.is_open():
                         with modal.container():
                             with st.form("data_access_form"):
-                                # Personal Information
                                 name = st.text_input("Name", "")
                                 email = st.text_input("Email", "")
-
-                                # Reason for Data Access
                                 reason = st.text_area("Reason for Data Access", "")
-
-                                # Submit Button
                                 submitted = st.form_submit_button("Submit Request")
                                 if submitted:
                                     if name and email and reason:
@@ -296,14 +289,9 @@ def search():
                     if modal.is_open():
                         with modal.container():
                             with st.form("data_access_form"):
-                                # Personal Information
                                 name = st.text_input("Name", "")
                                 email = st.text_input("Email", "")
-
-                                # Reason for Data Access
                                 reason = st.text_area("Reason for Data Access", "")
-
-                                # Submit Button
                                 submitted = st.form_submit_button("Submit Request")
                                 if submitted:
                                     if name and email and reason:
