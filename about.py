@@ -2,28 +2,9 @@ import streamlit as st
 from lorem_text import lorem
 import plotly.express as px
 import pandas as pd
+from graphics.figures import *
 
 df = pd.read_csv("./data/cidals_user_view.csv")
-df_full = pd.read_csv("./data/cidals_full_view.csv")
-
-value_counts = df["active_or_inactive"].value_counts()
-
-value_counts = df["active_or_inactive"].value_counts()
-
-colors = ["#5454b3", "#8CC589"]
-fig = px.pie(
-    data_frame=df,
-    values=value_counts,
-    names=value_counts.index,
-    title="Active vs. Inactive Distribution",
-    color=value_counts.index,
-    color_discrete_map={"active": colors[0], "inactive": colors[1]}
-)
-
-fig_2 = px.bar(df_full, x='ID_test_type', title='Distribution of Enzymo Target', color_discrete_sequence =['green']*len(df), opacity=1)
-fig_2.update_layout(plot_bgcolor='white', paper_bgcolor='white')
-fig_2.update_xaxes(title = "")
-fig_2.update_yaxes(showgrid=True, gridcolor='lightgray')
 
 text = lorem.paragraph()
 def about():
@@ -34,11 +15,13 @@ def about():
     """)
     col1, col2 = st.columns(2)
     with col1:
-        st.plotly_chart(fig)
+        pie_plot = pie() 
+        st.plotly_chart(pie_plot)
 
 
     with col2:
-        st.plotly_chart(fig_2)
+        bar_plot = bar()
+        st.plotly_chart(bar_plot)
 
 
     
