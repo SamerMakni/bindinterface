@@ -22,7 +22,7 @@ from scipy.spatial.distance import dice, cosine, hamming
 from streamlit_modal import Modal
 import streamlit.components.v1 as components
 import re
-
+from Emailer import EmailSender
 
 def pubchem_id_to_smiles(pubchem_id):
     try:
@@ -198,28 +198,6 @@ def search():
                         data=csv,
                         file_name='results.csv',
                         mime='text/csv',)
-                    modal = Modal("Request access to all data", key = 98)
-
-                    if modal.is_open():
-                        with modal.container():
-                            with st.form("data_access_form"):
-                                name = st.text_input("Name", "")
-                                email = st.text_input("Email", "")
-                                reason = st.text_area("Reason for Data Access", "")
-                                submitted = st.form_submit_button("Submit Request")
-                                if submitted:
-                                    if name and email and reason:
-                                        if is_valid_email(email):
-                                            st.success("Thank you! Your data access request has been submitted.")
-                                        else:
-                                            st.warning("Please enter a valid email address.")
-                                else:
-                                    st.warning("Please fill out all the fields.")
-                    open_modal = st.button("Request access to all data", key = 145)
-                    if open_modal:
-                        modal.open()
-                    
-
             except Exception as e:
                 print(e)
                 st.error('Invalid Smile')
@@ -284,28 +262,31 @@ def search():
                         data=csv,
                         file_name='results.csv',
                         mime='text/csv',)
-                    modal = Modal("Request access to all data", key = 99)
-
-                    if modal.is_open():
-                        with modal.container():
-                            with st.form("data_access_form"):
-                                name = st.text_input("Name", "")
-                                email = st.text_input("Email", "")
-                                reason = st.text_area("Reason for Data Access", "")
-                                submitted = st.form_submit_button("Submit Request")
-                                if submitted:
-                                    if name and email and reason:
-                                        if is_valid_email(email):
-                                            st.success("Thank you! Your data access request has been submitted.")
-                                        else:
-                                            st.warning("Please enter a valid email address.")
-                                else:
-                                    st.warning("Please fill out all the fields.")
-                    open_modal = st.button("Request access to all data", key = 259)
-                    if open_modal:
-                        modal.open()
-                    
 
             except Exception as e:
                 print(e)
                 st.error("Invalid PUBCHEM ID")
+    open_modal = st.button("Request access to all data", key = 145)
+    modal = Modal("Request access to all data", key = 98)
+    if modal.is_open():
+        with modal.container():
+            with st.form("data_access_form"):
+                name = st.text_input("Name")
+                email = st.text_input("Email")
+                reason = st.text_area("Reason for Data Access")
+                submitted = st.form_submit_button("Submit Request")
+                print(type(name))
+                print(name == False)
+                if submitted:
+                    if len(name) and len(email) and len(reason):
+                        if is_valid_email(email):
+                            email_ = EmailSender()
+                            subject = f"Data Request from {name}, [{email}]"
+                            email_.send_email("cidalsdb.contact@gmail.com", subject, reason)
+                            st.success("Thank you! Your data access request has been submitted.")                            
+                        else:
+                            st.warning("Please enter a valid email address.")
+                    else:
+                        st.warning("Please fill out all the fields.")
+    if open_modal:
+        modal.open()
