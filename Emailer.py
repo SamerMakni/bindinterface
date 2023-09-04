@@ -1,8 +1,9 @@
 import smtplib
 from email.message import EmailMessage
+import config
 
 class EmailSender:
-    def __init__(self, smtp_server = "smtp.gmail.com", smtp_port = 587 , username = "cidalsdb.contact@gmail.com", password = "mxslyjplrluudlgs"):
+    def __init__(self, smtp_server=config.SMTP_SERVER, smtp_port=config.SMTP_PORT, username=config.USERNAME, password=config.PASSWORD):
         self.smtp_server = smtp_server
         self.smtp_port = smtp_port
         self.username = username

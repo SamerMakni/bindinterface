@@ -136,7 +136,7 @@ def search():
     """
 
     np_data = np.load("./data/data.npy")
-    df_data = pd.read_csv(config.data_point)
+    df_data = pd.read_csv(config.DATA_POINT)
 
     tab1, tab2 = st.tabs(["Molecule SMILE", 'PUBCHEM ID'])
     with tab1:
