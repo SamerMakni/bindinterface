@@ -2,7 +2,7 @@
 import streamlit as st
 from stmol import showmol
 import py3Dmol
-from rdkit.Chem import Draw
+# from rdkit.Chem import Draw
 from rdkit import Chem
 from rdkit.Chem import AllChem
 import pubchempy
