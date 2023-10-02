@@ -1,5 +1,6 @@
 import smtplib
 from email.message import EmailMessage
+import streamlit as st
 # import config
 
 class EmailSender:
