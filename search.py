@@ -23,6 +23,14 @@ from streamlit_modal import Modal
 import streamlit.components.v1 as components
 import re
 from Emailer import EmailSender
+import random
+import string
+from captcha.image import ImageCaptcha
+
+
+captcha_codes = []
+captcha_codez = []
+
 
 def pubchem_id_to_smiles(pubchem_id):
     try:
@@ -269,24 +277,41 @@ def search():
     open_modal = st.button("Request access to all data", key = 145)
     modal = Modal("Request access to all data", key = 98)
     if modal.is_open():
+        captcha_length = 4  # You can adjust the length of the CAPTCHA code
+        captcha_code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=captcha_length))
+        captcha_codez.append(captcha_code)
         with modal.container():
             with st.form("data_access_form"):
-                name = st.text_input("Name")
-                email = st.text_input("Email")
+                col1, col2 = st.columns([0.4, 0.6])
+                with col1:
+                    name = st.text_input("Name")
+                with col2:
+                    email = st.text_input("Email")
+
+                col1, col2 = st.columns([0.8, 0.2])
                 reason = st.text_area("Reason for Data Access")
+                image_captcha = ImageCaptcha()
+                captcha_image = image_captcha.generate(captcha_code)
+                with col1:
+                    st.image(captcha_image, caption='CAPTCHA', width=250)
+                with col2:
+                    captcha_input = st.text_input("Enter CAPTCHA", "")
                 submitted = st.form_submit_button("Submit Request")
                 print(type(name))
                 print(name == False)
                 if submitted:
-                    if len(name) and len(email) and len(reason):
-                        if is_valid_email(email):
-                            email_ = EmailSender()
-                            subject = f"Data Request from {name}, [{email}]"
-                            email_.send_email("cidalsdb.contact@gmail.com", subject, reason)
-                            st.success("Thank you! Your data access request has been submitted.")                            
+                    if len(name) and len(email) and len(reason) and captcha_input:
+                        if captcha_input == captcha_codez[len(captcha_codez) - 2]:
+                            if is_valid_email(email):
+                                email_ = EmailSender()
+                                subject = f"Data Request from {name}, [{email}]"
+                                email_.send_email("cidalsdb.contact@gmail.com", subject, reason)
+                                st.success("Thank you! Your data access request has been submitted.")                            
+                            else:
+                                st.warning("Incorrect CAPTCHA code. Please try again.")
                         else:
-                            st.warning("Please enter a valid email address.")
+                            st.warning("Please fill out all the fields.")
                     else:
-                        st.warning("Please fill out all the fields.")
+                        st.warning("Please fill out all the fields and enter the correct CAPTCHA code.")
     if open_modal:
         modal.open()
