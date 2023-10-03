@@ -13,3 +13,4 @@ streamlit_on_Hover_tabs==1.0.1
 streamlit-modal==0.1.0
 lorem-text==2.1
 plotly==5.16.0
+captcha==0.5.0
