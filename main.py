@@ -10,7 +10,7 @@ from streamlit_extras.app_logo import add_logo
 
 st.set_page_config(
     page_title="CidalsDB",
-    page_icon="./images/chemistry.png",
+    page_icon="./media/logo_BIND.ico",
     layout="wide",
 )
 
