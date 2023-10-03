@@ -3,9 +3,9 @@ from PIL import Image
 
 
 def home():
-    meep = Image.open('./media/Logo_MEEP.png')
-    bind = Image.open('./media/Logo_BIND.png')
-    ipt = Image.open('./media/Logo_IPT.png')
+    meep = Image.open('./media/logo_MEEP.png')
+    bind = Image.open('./media/logo_BIND.png')
+    ipt = Image.open('./media/logo_IPT.png')
 
     col1, col2, col3= st.columns([0.2, 0.4, 0.4])
     with col1:
