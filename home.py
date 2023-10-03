@@ -3,7 +3,7 @@ from PIL import Image
 
 
 def home():
-    meep = Image.open('./media/logo_MEEP.png')
+    meep = Image.open('./media/Logo_MEEP.png')
     bind = Image.open('./media/logo_BIND.png')
     ipt = Image.open('./media/logo_IPT.png')
 
