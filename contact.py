@@ -15,7 +15,7 @@ def is_valid_email(email):
 captcha_codes = []
 
 def contact():
-    captcha_length = 1  # You can adjust the length of the CAPTCHA code
+    captcha_length = 5  # You can adjust the length of the CAPTCHA code
     captcha_code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=captcha_length))
     captcha_codes.append(captcha_code)
     print(captcha_codes)
