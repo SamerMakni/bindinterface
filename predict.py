@@ -132,7 +132,7 @@ def predict():
                             st.error('Inactive', icon="❌")
                 except Exception as e:
                     print(e)
-                    st.error('Invalid Smile')
+                    st.error(e)
 
 
 
