@@ -35,15 +35,13 @@ streamlit_style = """
 st.markdown(streamlit_style, unsafe_allow_html=True)
 
 with st.sidebar:
-    tabs = on_hover_tabs(tabName=['Home', 'Information','Search', 'Predict', 'Contact Us'], 
-                         iconName=['home', 'info','search', 'functions', 'alternate_email'],
+    tabs = on_hover_tabs(tabName=['Home', 'Search', 'Predict', 'Contact Us'], 
+                         iconName=['home', 'search', 'functions', 'alternate_email'],
                          key="1",
                          default_choice=0)
 
 if tabs == 'Home':
     home()
-
-elif tabs == 'Information':
     about()
 
 elif tabs == 'Search':
