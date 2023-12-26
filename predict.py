@@ -18,7 +18,7 @@ import pickle
 from sklearn.neural_network import MLPClassifier
 import os
 import pickle
-
+import torch
 
 def load_pickle_files_from_folder(folder_path, name_condition=None):
     file_names = []
