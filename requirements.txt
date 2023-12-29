@@ -1,5 +1,5 @@
 numpy==1.22.3
-setuptools
+lxml==3.4.2
 pandas==1.5.3
 PubChemPy==1.0.4
 py3Dmol==2.0.3
