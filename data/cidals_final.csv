@@ -1,4 +1,4 @@
-SMILES,Common_name,IC50micromol,IC50microgML,Formula,Weight,Origin,Nature,Family,Sub_family,Biological Activity,References,References_
+SMILES,Common name,IC50micromol,IC50microgML,Formula,Weight,Origin,Nature,Family,Sub family,Biological Activity,References,References_
 C1=CC=C2C(=C1)C3=C(N2O)C(=NC=C3)C4=NC(=NC=C4)N,N-hydroxyannomontine,252.7 ±2.2,,C15H11N5O,277.281,Annona fetida (Annonaceae),natural,alkaloid,isoquinoline Alkaloid,active,10.1021/cr400552x,
 C1=CC=C2C(=C1)C3=C(N2O)C(=NC=C3)C4=NC(=NC=C4)N,N-hydroxyannomontine,437.5 ±2.5,,C15H11N5O,277.281,Annona fetida (Annonaceae),natural,alkaloid,isoquinoline Alkaloid,active,10.1021/cr400552x,
 "c1ccc2c(c1)c3ccnc(c3[nH]2)c4ccnc(n4)N

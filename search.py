@@ -169,7 +169,7 @@ def search():
                         st.caption(name)
                     except:
                         print("cant generate name")
-                df_smiles = df_data['smiles'].tolist()
+                df_smiles = df_data['Smiles'].tolist()
                 similarities = calculate_similarity(smile, df_smiles, np_data, distance_metric = distance)
                 df_data['Chemical Distance Similarity'] = similarities
                 df_data.sort_values(by='Chemical Distance Similarity', inplace=True, ascending=False)
@@ -179,7 +179,7 @@ def search():
                     filtered_df = filtered_df[filtered_df['active_or_inactive'] == 'active']
                 filtered_df.drop(columns='Chemical Distance Similarity', inplace=True)
                 filtered_df = filtered_df.loc[:, ~filtered_df.columns.str.contains('^Unnamed')]
-                styled_filtered_df = filtered_df.style.applymap(highlight_active, subset=['active_or_inactive'])
+                styled_filtered_df = filtered_df.style.applymap(highlight_active, subset=['Biological Activity'])
                 if filtered_df.empty:
                     st.warning("No results found for the given SMILES.")
                 else:
@@ -240,10 +240,10 @@ def search():
                 filtered_df = df_data.head(N)
                 filtered_df.insert(0, 'Chemical Distance', filtered_df['Chemical Distance Similarity'])
                 if show_active_only:
-                    filtered_df = filtered_df[filtered_df['active_or_inactive'] == 'active']
+                    filtered_df = filtered_df[filtered_df['Biological Activity'] == 'active']
                 filtered_df.drop(columns='Chemical Distance Similarity', inplace=True)
                 filtered_df = filtered_df.loc[:, ~filtered_df.columns.str.contains('^Unnamed')]
-                styled_filtered_df = filtered_df.style.applymap(highlight_active, subset=['active_or_inactive'])
+                styled_filtered_df = filtered_df.style.applymap(highlight_active, subset=['Biological Activity'])
                 if filtered_df.empty:
                     st.warning("No results found for the given SMILES.")
                 else:
