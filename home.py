@@ -7,12 +7,13 @@ def home():
     bind = Image.open('./media/logo_BIND.png')
     ipt = Image.open('./media/logo_IPT.png')
     cidals = Image.open('./media/logo_CidalsDB.png')
+    all_logos = Image.open('./media/logos.png') 
 
     cola, colb, colc= st.columns([0.3, 0.4, 0.3])
     with cola:
         pass
     with colb:
-        st.image(cidals, width=400)
+        st.image(all_logos, width=400)
     with colb:
         pass
     col1, col2, col3= st.columns([0.2, 0.4, 0.4])
