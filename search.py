@@ -208,6 +208,7 @@ def search():
                         mime='text/csv',)
             except Exception as e:
                 print(e)
+                st.error(e)
                 st.error('Invalid Smile')
 
     with tab2:
