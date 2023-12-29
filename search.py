@@ -233,7 +233,7 @@ def search():
                         st.caption(name)
                     except:
                         print("cant generate name")
-                df_smiles = df_data['smiles'].tolist()
+                df_smiles = df_data['Smiles'].tolist()
                 similarities = calculate_similarity(smile_pub , df_smiles, np_data, distance_metric = distance)
                 df_data['Chemical Distance Similarity'] = similarities
                 df_data.sort_values(by='Chemical Distance Similarity', inplace=True, ascending=False)
