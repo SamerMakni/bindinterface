@@ -9,20 +9,10 @@ def home():
     cidals = Image.open('./media/logo_CidalsDB.png')
     all_logos = Image.open('./media/logos.png') 
 
-    cola, colb, colc= st.columns([0.1, 0.8, 0.1])
+    cola, colb, colc= st.columns([0.2, 0.6, 0.2])
     with cola:
         pass
     with colb:
-        st.image(all_logos, width=700)
+        st.image(all_logos, width=600)
     with colb:
         pass
-    col1, col2, col3= st.columns([0.2, 0.4, 0.4])
-    with col1:
-        st.image(bind, width=200)
-
-    with col2:
-        st.image(meep, width=400)
-
-    with col3:
-        st.image(ipt, width=200)
-    st.markdown(r"$$\textrm{\large{CidalsDB and its ML-based activity prediction module present a democratized and no-code CADD tool.}}$$")
