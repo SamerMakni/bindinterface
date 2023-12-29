@@ -1,5 +1,0 @@
-libgl1-mesa-glx
-libxrender1
-libxml2-dev
-libxslt-dev
-python-dev
