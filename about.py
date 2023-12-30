@@ -80,7 +80,7 @@ def about():
     st.markdown(r"""## Workflow""")
     first_co, _ ,last_co = st.columns([0.5,0.1,0.4])
     with last_co:
-        st.image("media/search.png", output_format = "png", caption="Pipeline of Chemcial Search", width=300)
+        st.image("https://i.ibb.co/9Y8ppQ6/model-ml-drawio.png", output_format = "png", caption="Pipeline of Chemcial Search", width=300)
     with first_co:
         st.markdown(r"""
             The chemical search feature works by first having the user submit a SMILES query. This query is then converted into a fingerprint. Subsequently, the fingerprint is compared to the fingerprints of all the molecules in the dataset. Using one of the distance measures introduced earlier, it calculates the similarity between the query molecule and each of the molecules in the dataset. Finally, the N (<100) most similar molecules are returned to the user.
