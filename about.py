@@ -84,7 +84,8 @@ def about():
     with last_co:
         st.markdown(r"""
             The chemical search feature works by first having the user submit a SMILES query. This query is then converted into a fingerprint. Subsequently, the fingerprint is compared to the fingerprints of all the molecules in the dataset. Using one of the distance measures introduced earlier, it calculates the similarity between the query molecule and each of the molecules in the dataset. Finally, the N (<100) most similar molecules are returned to the user.
-
+            """)
+    st.markdown(r"""        
             ## Activity Prediction
 
             ### Encoding
@@ -96,6 +97,7 @@ def about():
             The dataset used for training is a BioAssay available on [PubChem](https://pubchem.ncbi.nlm.nih.gov/bioassay/1063)(Leishmania major promastigote HTS).  Our approach to data splitting is the 80/20 split, where the dataset is divided into an 80\% training set 
             $$ D_{train} $$  and a 20\%  test set $$ D_{test} $$ , $$len(D_{train}) = 156,938 $$ and  $$len(D_{test}) = 39,235 $$
             To address the problem of class imbalance present in our dataset, we applied Random Oversampling to the training set, changing the ratio between the two classes from 1:9 to 1:1.""")
+
 
     left_co, cent_co,last_co = st.columns(3)
     with cent_co:
