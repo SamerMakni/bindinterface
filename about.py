@@ -101,5 +101,5 @@ def about():
 
     left_co, cent_co,last_co = st.columns(3)
     with cent_co:
-        st.image("https://i.ibb.co/9Y8ppQ6/model-ml-drawio.png", output_format = "png", caption="Pipeline of Traning and Predictions", width=500)
+        st.image("https://i.ibb.co/9Y8ppQ6/model-ml-drawio.png", output_format = "png", caption="Pipeline of Traning and Predictions", width=550)
     
