@@ -144,7 +144,7 @@ def predict():
             pass 
         else:
             try:
-                cola, colb = st.columns([0.7, 0.3]))
+                cola, colb = st.columns([0.7, 0.3])
                 with cola:
                     smile = pubchem_id_to_smiles(pub)
                     name = generate_name(smile)
