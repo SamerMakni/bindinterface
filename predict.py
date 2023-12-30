@@ -144,17 +144,22 @@ def predict():
             pass 
         else:
             try:
+                col1, col2 = st.columns([0.7, 0.3])
                 smile = pubchem_id_to_smiles(pub)
                 name = generate_name(smile)
                 st.caption(name)
                 render = makeblock(smile)
-                render_mol(render)
+                with col1:
+                    render_mol(render)
                 progress_text = "Operation in progress. Please wait."
                 with st.spinner(progress_text):
                     if predict_with_model(smile, f".//models/{option}.pkl") == 1:
-                        st.success('Active', icon="✅")
+                        with col2:
+                            st.success('Active', icon="✅")
                     elif predict_with_model(smile, f"./models/{option}.pkl") == 0:
-                        st.error('Inactive', icon="❌")
+                        with col2:
+                            st.error('Inactive', icon="❌")
             except Exception as e:
                 print(e)
                 st.error('Invalid PubchemID')
+col1, col2 = st.columns([0.7, 0.3])
