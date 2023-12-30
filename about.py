@@ -78,7 +78,7 @@ def about():
         """)
 
     st.markdown(r"""## Workflow""")
-    first_co, _ ,last_co = st.columns([0.4,0.2,0.4])
+    first_co, _ ,last_co = st.columns([0.5,0.1,0.4])
     with last_co:
         st.image("media/search.png", output_format = "png", caption="Pipeline of Chemcial Search", width=300)
     with first_co:
