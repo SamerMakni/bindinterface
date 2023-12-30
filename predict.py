@@ -122,7 +122,6 @@ def predict():
                 try:
                     col1, col2 = st.columns([0.7, 0.3])
                     with col1:
-                        smile = pubchem_id_to_smiles(pub)
                         name = generate_name(smile)
                         st.caption(name)
                         render = makeblock(smile)
