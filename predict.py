@@ -162,4 +162,3 @@ def predict():
             except Exception as e:
                 print(e)
                 st.error('Invalid PubchemID')
-col1, col2 = st.columns([0.7, 0.3])
