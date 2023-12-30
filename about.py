@@ -78,31 +78,26 @@ def about():
         """)
 
     st.markdown(r"""## Workflow""")
-    left_co, cent_co,last_co = st.columns(3)
-    with cent_co:
+    first_co,last_co = st.columns(2)
+    with first_co:
         st.image("media/search.png", output_format = "png", caption="Pipeline of Chemcial Search")
-    st.markdown(r"""
+    with last_com:
+        st.markdown(r"""
+            The chemical search feature works by first having the user submit a SMILES query. This query is then converted into a fingerprint. Subsequently, the fingerprint is compared to the fingerprints of all the molecules in the dataset. Using one of the distance measures introduced earlier, it calculates the similarity between the query molecule and each of the molecules in the dataset. Finally, the N (<100) most similar molecules are returned to the user.
 
-    The chemical search feature works by first having the user submit a SMILES query. This query is then converted into a fingerprint. Subsequently, the fingerprint is compared to the fingerprints of all the molecules in the dataset. Using one of the distance measures introduced earlier, it calculates the similarity between the query molecule and each of the molecules in the dataset. Finally, the N (<100) most similar molecules are returned to the user.
-    
-    ## Activity Prediction
+            ## Activity Prediction
 
-    ### Encoding
-    The process of data encoding involves transforming the SMILES representations from our molecule dataset into molecular fingerprints. This transformation allows us to extract features from each molecule and represent them in a suitable manner for machine learning algorithms.
-    We opted to use [RDKitDescriptors](https://www.rdkit.org/docs/source/rdkit.Chem.Descriptors.html), which are binary vectors with a size we determined to be 2048.
+            ### Encoding
+            The process of data encoding involves transforming the SMILES representations from our molecule dataset into molecular fingerprints. This transformation allows us to extract features from each molecule and represent them in a suitable manner for machine learning algorithms.
+            We opted to use [RDKitDescriptors](https://www.rdkit.org/docs/source/rdkit.Chem.Descriptors.html), which are binary vectors with a size we determined to be 2048.
 
-    ### Training
+            ### Training
 
-    The dataset used for training is a BioAssay available on [PubChem](https://pubchem.ncbi.nlm.nih.gov/bioassay/1063)(Leishmania major promastigote HTS).  Our approach to data splitting is the 80/20 split, where the dataset is divided into an 80\% training set 
-    $$ D_{train} $$  and a 20\%  test set $$ D_{test} $$ , $$len(D_{train}) = 156,938 $$ and  $$len(D_{test}) = 39,235 $$
-    To address the problem of class imbalance present in our dataset, we applied Random Oversampling to the training set, changing the ratio between the two classes from 1:9 to 1:1.""")
+            The dataset used for training is a BioAssay available on [PubChem](https://pubchem.ncbi.nlm.nih.gov/bioassay/1063)(Leishmania major promastigote HTS).  Our approach to data splitting is the 80/20 split, where the dataset is divided into an 80\% training set 
+            $$ D_{train} $$  and a 20\%  test set $$ D_{test} $$ , $$len(D_{train}) = 156,938 $$ and  $$len(D_{test}) = 39,235 $$
+            To address the problem of class imbalance present in our dataset, we applied Random Oversampling to the training set, changing the ratio between the two classes from 1:9 to 1:1.""")
 
     left_co, cent_co,last_co = st.columns(3)
     with cent_co:
-        st.image("media/model_ml.png", output_format = "png", caption="Pipeline of Traning and Predictions")
+        st.image("media/model_ml.png", output_format = "png", caption="Pipeline of Traning and Predictions", width=800)
     
-    st.markdown(r""" 
-    ### Algorithm
-    A Random Forest Algorithm was trained on the resampled training set with the following hyperparameters, `n_estimators`: 80, `max_features`: sqrt
-
-    """)
