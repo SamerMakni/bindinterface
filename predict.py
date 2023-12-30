@@ -19,6 +19,8 @@ from sklearn.neural_network import MLPClassifier
 import os
 import pickle
 import torch
+from streamlit_extras.add_vertical_space import add_vertical_space
+
 
 def load_pickle_files_from_folder(folder_path, name_condition=None):
     file_names = []
@@ -130,8 +132,10 @@ def predict():
                     with col2:
                         with st.spinner(progress_text):
                             if predict_with_model(smile, f".//models/{option}.pkl") == 1:
+                                add_vertical_space(4)
                                 st.success('Active', icon="✅")
                             elif predict_with_model(smile, f"./models/{option}.pkl") == 0:
+                                add_vertical_space(4)
                                 st.error('Inactive', icon="❌")
                 except Exception as e:
                     print(e)
