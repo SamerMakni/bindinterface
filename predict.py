@@ -144,15 +144,15 @@ def predict():
             pass 
         else:
             try:
-                col1, col2 = st.columns([0.7, 0.3])
+                cola, colb = st.columns([0.7, 0.3])
                 smile = pubchem_id_to_smiles(pub)
                 name = generate_name(smile)
                 st.caption(name)
-                with col1:
+                with cola:
                     render = makeblock(smile)
                     render_mol(render)
                 progress_text = "Operation in progress. Please wait."
-                with col2:
+                with colb:
                     with st.spinner(progress_text):
                         if predict_with_model(smile, f".//models/{option}.pkl") == 1:
                             st.success('Active', icon="✅")
