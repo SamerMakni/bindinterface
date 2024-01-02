@@ -16,6 +16,16 @@ def home():
         pass
     with colb:
         pass
+    st.markdown(
+    """
+    <style>
+    #footnotes {
+        display: none
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
     st.markdown(r"""
 # CidalsDB: An Open Resource for Anti-Pathogen Molecules
 
@@ -29,14 +39,5 @@ CidalsDB serves as an evolutive platform for democratized and no-code Computer-A
 
 [^3^]: Harigua-Souiai, E., Makni, S., Masmoudi, O., Hamdi, S., Oualha, R., Abdelkrim, Y.Z., Souiai, O., Guizani, I. CidalsDB: An AI-empowered platform for anti-pathogen therapeutics research. Submitted.
 """)
-st.markdown(
-    """
-    <style>
-    #footnotes {
-        display: none
-    }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
+
     
