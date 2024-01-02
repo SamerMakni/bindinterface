@@ -11,9 +11,9 @@ def home():
 
     cola, colb, colc= st.columns([0.2, 0.6, 0.2])
     with cola:
-        pass
+        st.image("https://i.ibb.co/5Knkk4G/logo-cidals.png", width=300)
     with colb:
-        st.image("https://i.ibb.co/5Knkk4G/logo-cidals.png", width=600)
+        pass
     with colb:
         pass
     st.markdown("""
