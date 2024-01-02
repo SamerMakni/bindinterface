@@ -115,13 +115,13 @@ def about():
     ## Acknowledgement
     """)
 
-    cola, colb, colc = st.columns(3)
-    with cola:
-        st.image(bind)
-    with colb:
-        st.image(meep)
-    with colb:
-        st.image(ipt)
+    col_x, col_y, col_z = st.columns(3)
+    with col_x:
+        st.image(bind, width=200)
+    with col_y:
+        st.image(meep, width=200)
+    with col_z:
+        st.image(ipt, width=200)
     
     
     
