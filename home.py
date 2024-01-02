@@ -13,6 +13,6 @@ def home():
     with cola:
         pass
     with colb:
-        st.image(all_logos, width=600)
+        st.image(cidals, width=600)
     with colb:
         pass
