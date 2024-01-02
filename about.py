@@ -4,6 +4,7 @@ import plotly.express as px
 import pandas as pd
 from graphics.figures import *
 import base64
+from PIL import Image
 
 df = pd.read_csv("./data/cidals_user_view.csv")
 
