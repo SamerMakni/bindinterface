@@ -15,7 +15,7 @@ def pie():
         data_frame=df,
         values=value_counts,
         names=value_counts.index,
-        title="Active vs. Inactive Distribution",
+        title="Active vs. Inactive Distribution (Leishmania dataset)",
         color=value_counts.index,
         color_discrete_map={"active": colors[0], "inactive": colors[1]}
     )
@@ -23,7 +23,7 @@ def pie():
     return fig
 
 def bar():
-    fig = px.bar(df_full, x='ID_test_type', title='Distribution of Enzymo Target', color_discrete_sequence =['green']*len(df), opacity=1)
+    fig = px.bar(df_full, x='ID_test_type', title='Distribution of Enzymo Target (Leishmania dataset)', color_discrete_sequence =['green']*len(df), opacity=1)
     fig.update_layout(width=500,height=350,plot_bgcolor='white', paper_bgcolor='white')
     fig.update_xaxes(title = "")
     fig.update_yaxes(showgrid=True, gridcolor='lightgray')
