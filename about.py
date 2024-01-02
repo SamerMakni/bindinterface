@@ -119,7 +119,7 @@ def about():
     with col_x:
         st.image(bind, width=200)
     with col_y:
-        st.image(meep, width=200)
+        st.image(meep, width=400)
     with col_z:
         st.image(ipt, width=200)
     
