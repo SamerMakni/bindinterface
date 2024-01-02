@@ -13,7 +13,7 @@ def home():
     with cola:
         pass
     with colb:
-        st.image(cidals, width=600)
+        st.image(url="https://i.ibb.co/5Knkk4G/logo-cidals.png" alt="logo-cidals", width=600)
     with colb:
         pass
     st.markdown("""
