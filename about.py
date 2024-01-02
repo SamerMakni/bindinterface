@@ -14,7 +14,6 @@ bind = Image.open('./media/logo_BIND.png')
 ipt = Image.open('./media/logo_IPT.png')
 
 def about():
-    st.title("About CidalsDB")
     st.header("Datasets")
     st.write("""
     For now, we have datasets for two infectious diseases of interest within the **CidalsDB** database, that are accessible for the scientific community, namely *Leishmaniases* and *Coronaviruses*. For each disease, we performed an extensive search of the literature and retrieved data on molecules with validated anti-pathogen effects. We defined a data dictionary of published information related to the biological activity of the chemical compounds and used it to build the database. Then, we enriched the literature data with confirmatory screening datasets from PubChem. This led to consolidated sets of active and inactive molecules against Leishmania parasites and Coronaviruses. Additional infectious diseases will be considered to expand the database content.
