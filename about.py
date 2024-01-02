@@ -115,7 +115,7 @@ def about():
     ## Acknowledgement
     """)
 
-    col_x, col_y, col_z = st.columns([0.1, 0.2, 0.2])
+    col_x, col_y, col_z = st.columns([0.1, 0.2, 0.1])
     with col_x:
         st.image(ipt, width=150)
     with col_y:
