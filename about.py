@@ -94,7 +94,7 @@ def about():
 
             ### Encoding
             The process of data encoding involves transforming the SMILES representations from our molecule dataset into molecular fingerprints. This transformation allows us to extract features from each molecule and represent them in a suitable manner for machine learning algorithms.
-            We opted to use [RDKitDescriptors](https://www.rdkit.org/docs/source/rdkit.Chem.Descriptors.html), which are binary vectors with a size we determined to be 2048.
+            We opted to use [RDKitDescriptors](https://www.rdkit.org/docs/source/rdkit.Chem.Descriptors.html), which are binary vectors with a size we set to be 2048.
 
             ### Predictive models
             We trained and optimized ML and DL algorithms on the content of the CidalsDB, namely the RF model on the Leishmania dataset and the GCN model on the Coronaviruses dataset.
