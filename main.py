@@ -26,9 +26,8 @@ hide_streamlit_style = """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
 streamlit_style = """
 			<style>
-            @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&family=Libre+Franklin&display=swap');
-			html, body, [class*="css"]  {
-            font-family: 'IBM Plex Sans', sans-serif;
+            @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Display:wght@300&display=swap');  {
+            font-family: 'Noto Sans Display', sans-serif;
 			}
 			</style>
 			"""
