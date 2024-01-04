@@ -176,7 +176,7 @@ def search():
                 filtered_df = df_data.head(N)
                 filtered_df.insert(0, 'Chemical Distance', filtered_df['Chemical Distance Similarity'])
                 if show_active_only:
-                    filtered_df = filtered_df[filtered_df['active_or_inactive'] == 'active']
+                    filtered_df = filtered_df[filtered_df['Biological Activity'] == 'active']
                 filtered_df.drop(columns='Chemical Distance Similarity', inplace=True)
                 filtered_df = filtered_df.loc[:, ~filtered_df.columns.str.contains('^Unnamed')]
                 styled_filtered_df = filtered_df.style.applymap(highlight_active, subset=['Biological Activity'])
