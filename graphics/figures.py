@@ -4,8 +4,8 @@ import pandas as pd
 df = pd.read_csv("./data/cidals_final.csv")
 df_full = pd.read_csv("./data/cidals_full_view.csv")
 
-value_counts = df["Biological Activity"].value_counts()
-
+unique_values = df["Biological Activity"].unique()
+value_counts = pd.Series(unique_values).value_counts()
 def pie():
     colors = ["#5454b3", "#8CC589"]
     fig = px.pie(
