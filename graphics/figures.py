@@ -4,10 +4,7 @@ import pandas as pd
 df = pd.read_csv("./data/cidals_final.csv")
 df_full = pd.read_csv("./data/cidals_full_view.csv")
 
-value_counts = df["active_or_inactive"].value_counts()
-
-value_counts = df["active_or_inactive"].value_counts()
-
+value_counts = df["Biological Activity"].value_counts()
 
 def pie():
     colors = ["#5454b3", "#8CC589"]
