@@ -118,9 +118,9 @@ def about():
 
     col_x, col_y, col_z = st.columns([0.05, 0.1, 0.2])
     with col_x:
-        st.image(ipt, width=150)
+        st.image(bind, width=150)
     with col_y:
         st.image(meep, width=300)
     with col_z:
-        st.image(bind, width=200)
+        st.image(ipt, width=200)
     
