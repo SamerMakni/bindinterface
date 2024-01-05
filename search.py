@@ -274,7 +274,7 @@ def search():
 
             except Exception as e:
                 print(e)
-                st.error("Invalid PUBCHEM ID")
+                st.error(e)
     open_modal = st.button("Request access to all data", key = 145)
     modal = Modal("Request access to all data", key = 98)
     if modal.is_open():
