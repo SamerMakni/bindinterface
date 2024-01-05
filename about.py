@@ -13,7 +13,7 @@ meep = Image.open('./media/Logo_MEEP.png')
 bind = Image.open('./media/logo_BIND.png')
 ipt = Image.open('./media/logo_IPT.png')
 compound_distribution = Image.open('./media/Distribution_of_compounds2.png')
-
+all_logos = Image.open("./media/all_logos.png")
 def about():
     st.header("Datasets")
     st.write("""
@@ -116,11 +116,5 @@ def about():
     ## Acknowledgement
     """)
 
-    col_x, col_y, col_z = st.columns([0.4, 0.2, 0.4])
-    with col_x:
-        st.image(bind, width=150)
-    with col_y:
-        st.image(meep, width=300)
-    with col_z:
-        st.image(ipt, width=100)
+    st.image(all_logos)
     
