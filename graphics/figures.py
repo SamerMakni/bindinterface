@@ -7,14 +7,14 @@ df_unique_smiles = df.drop_duplicates(subset="SMILES")
 unique_values = df_unique_smiles["Biological Activity"]
 value_counts = pd.Series(unique_values).value_counts()
 def pie():
-    colors = ["#5454b3", "#8CC581"]
     fig = px.pie(
+        colors = ["#5454b3", "#8CC589"]
         data_frame=df,
         values=value_counts,
         names=value_counts.index,
         title="Active vs. Inactive Distribution (Leishmania dataset)",
         color=value_counts.index,
-        color_discrete_map={"active": colors[0], "inactive": colors[1]}
+        color_discrete_map={"Active": colors[0], "Inactive": colors[1]}
     )
     fig.update_layout(width=500,height=350)
     return fig
