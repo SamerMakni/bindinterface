@@ -1,4 +1,4 @@
-ID_compound,SMILES,Common name,Biological Activity,Pathogen,IC50(µM/ml) ,IC50(µg/ml),% Inhibition ,Weight,Origin,Formula,Nature,Family,Subfamily,ID_ref,References,References_
+CompoundID,SMILES,Common name,Biological Activity,Pathogen,IC50(µM/ml) ,IC50(µg/ml),% Inhibition ,Weight,Origin,Formula,Nature,Family,Subfamily,ID_ref,References,References_
 1,C1=CC=C2C(=C1)C3=C(N2O)C(=NC=C3)C4=NC(=NC=C4)N,N-hydroxyannomontine,Active,Leishmania,252.7 ±2.2,,,277.281,Annona fetida (Annonaceae),C15H11N5O,natural,alkaloid,isoquinoline Alkaloid,1,10.1021/cr400552x,
 2,C1=CC=C2C(=C1)C3=C(N2O)C(=NC=C3)C4=NC(=NC=C4)N,N-hydroxyannomontine,Active,Leishmania,437.5 ±2.5,,,277.281,Annona fetida (Annonaceae),C15H11N5O,natural,alkaloid,isoquinoline Alkaloid,1,10.1021/cr400552x,
 3,"c1ccc2c(c1)c3ccnc(c3[nH]2)c4ccnc(n4)N
