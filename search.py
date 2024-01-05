@@ -143,7 +143,7 @@ def search():
     ### Search By Smiles
     """
 
-    np_data = np.load("./data/data.npy")
+    np_data = np.load("./data/data_updated.npy")
     df_data = pd.read_csv(st.secrets["DATA_POINT"])
 
     tab1, tab2 = st.tabs(["Molecule SMILE", 'PUBCHEM ID'])
