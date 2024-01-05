@@ -12,6 +12,7 @@ text = lorem.paragraph()
 meep = Image.open('./media/Logo_MEEP.png')
 bind = Image.open('./media/logo_BIND.png')
 ipt = Image.open('./media/logo_IPT.png')
+compound_distribution = Image.open('./media/Distribution_of_compounds2.png')
 
 def about():
     st.header("Datasets")
@@ -27,10 +28,11 @@ def about():
         bar_plot = bar()
         st.plotly_chart(bar_plot)
 
-    col_i, col_j = st.columns(2)
+    col_i, col_j, col_n = st.columns(3)
     with col_i:
+        pass
+    with col_j:
         st.image()
-    
     st.markdown(r"""
     ## Chemical Similarity Search
     ### Overview
