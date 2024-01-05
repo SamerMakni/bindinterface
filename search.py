@@ -244,6 +244,7 @@ def search():
                 filtered_df.drop(columns='Chemical Distance Similarity', inplace=True)
                 filtered_df = filtered_df.loc[:, ~filtered_df.columns.str.contains('^Unnamed')]
                 styled_filtered_df = filtered_df.style.applymap(highlight_active, subset=['Biological Activity'])
+                styled_filtered_df..drop(columns=['CompoundID', 'ID_ref', 'References_'])
                 if filtered_df.empty:
                     st.warning("No results found for the given SMILES.")
                 else:
@@ -261,7 +262,6 @@ def search():
                                         }, hide_index=True)
                     @st.cache_data            
                     def convert_df(df):
-                        # IMPORTANT: Cache the conversion to prevent computation on every rerun
                         return df.to_csv().encode('utf-8')
 
                     csv = convert_df(filtered_df)
