@@ -32,7 +32,7 @@ def about():
     with col_i:
         pass
     with col_j:
-        st.image("https://i.ibb.co/r2hvk40/Distribution-of-compounds2.png", width=420)
+        st.image("https://i.ibb.co/r2hvk40/Distribution-of-compounds2.png", width=450)
     with col_n:
         pass
     st.markdown(r"""
@@ -103,7 +103,11 @@ def about():
             We opted to use [RDKitDescriptors](https://www.rdkit.org/docs/source/rdkit.Chem.Descriptors.html), which are binary vectors with a size we set to be 2048.
 
             ### Predictive models
-           We trained and optimized ML and DL algorithms on the content of the CidalsDB, namely RF and MLP models on the Leishmania dataset and the GCN model on the Coronaviruses dataset. All technical details on the training, optimization and validation of the models can be found in the publication Harigua-Souia et al.,[3]""")
+            We trained and optimized ML and DL algorithms on the content of the CidalsDB, namely the RF model on the Leishmania dataset and the GCN model on the Coronaviruses dataset.
+
+            The dataset used for Leishmania is a BioAssay available on [PubChem](https://pubchem.ncbi.nlm.nih.gov/bioassay/1063)(Leishmania major promastigote HTS).  Our approach to data splitting is the 80/20 split, where the dataset is divided into an 80\% training set 
+            $$ D_{train} $$  and a 20\%  test set $$ D_{test} $$ , $$len(D_{train}) = 156,938 $$ and  $$len(D_{test}) = 39,235 $$
+            To address the problem of class imbalance present in our dataset, we applied Random Oversampling to the training set, changing the ratio between the two classes from 1:9 to 1:1.""")
 
 
     left_co, cent_co,last_co = st.columns(3)
