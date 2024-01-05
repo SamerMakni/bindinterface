@@ -1,7 +1,7 @@
 import plotly.express as px
 import pandas as pd
 
-df = pd.read_csv("./data/cidals_final.csv")
+df = pd.read_csv("./data/cidals_final_2.csv")
 df_full = pd.read_csv("./data/cidals_full_view.csv")
 
 unique_values = df["Biological Activity"]
