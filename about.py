@@ -27,7 +27,9 @@ def about():
         bar_plot = bar()
         st.plotly_chart(bar_plot)
 
-
+    col_i, col_j = st.columns(2)
+    with col_i:
+        st.image()
     
     st.markdown(r"""
     ## Chemical Similarity Search
