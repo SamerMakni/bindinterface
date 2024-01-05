@@ -32,7 +32,9 @@ def about():
     with col_i:
         pass
     with col_j:
-        st.image()
+        st.image(compound_distribution)
+    with col_n:
+        pass
     st.markdown(r"""
     ## Chemical Similarity Search
     ### Overview
