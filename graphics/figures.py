@@ -7,7 +7,7 @@ df_unique_smiles = df.drop_duplicates(subset="SMILES")
 unique_values = df_unique_smiles["Biological Activity"]
 value_counts = pd.Series(unique_values).value_counts()
 def pie():
-    colors = ["#5454b3", "#8CC589"]
+    colors = ["#5454b3", "#8CC581"]
     fig = px.pie(
         data_frame=df,
         values=value_counts,
