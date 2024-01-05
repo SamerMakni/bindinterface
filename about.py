@@ -32,7 +32,7 @@ def about():
     with col_i:
         pass
     with col_j:
-        st.image(compound_distribution)
+        st.image(compound_distribution, width=500)
     with col_n:
         pass
     st.markdown(r"""
