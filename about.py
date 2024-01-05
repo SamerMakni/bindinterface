@@ -32,7 +32,7 @@ def about():
     with col_i:
         pass
     with col_j:
-        st.image("https://i.ibb.co/r2hvk40/Distribution-of-compounds2.png", width=500)
+        st.image("https://i.ibb.co/r2hvk40/Distribution-of-compounds2.png", width=420)
     with col_n:
         pass
     st.markdown(r"""
